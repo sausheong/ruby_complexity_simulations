@@ -1,17 +1,17 @@
 class CultureSimulation 
-  attr :grid, :fdistances, :changes, :uniques, :mask, :mask_array, :size
+  attr :grid, :cdistances, :changes, :uniques, :mask, :mask_array, :size
   
   def initialize(size=36) 
     @grid = Grid.new(size)
     @size = size
     @mask = 0x000000F
     @mask_array = [0xFFFFF0, 0xFFFF0F, 0xFFF0FF, 0xFF0FFF, 0xF0FFFF, 0x0FFFFF]
-    @fdistances, @changes, @uniques = [], [], []      
+    @cdistances, @changes, @uniques = [], [], []      
   end
   
   def tick
   	change = 0
-  	2000.times do |c|
+  	(@grid.size/6).times do |c|
   		r = Random.rand(@grid.size)
   		neighbours = @grid.find_neighbours_index(r)
   		neighbours.each do |neighbour|
@@ -34,7 +34,7 @@ class CultureSimulation
         end
       end
     end
-  	@fdistances << feature_distance_average
+  	@cdistances << cultural_distance_average
   	@changes << change/@size
   	@uniques << @grid.uniq.size
   end
@@ -47,19 +47,19 @@ class CultureSimulation
   	difference
   end
   
-  def feature_distance_average
+  def cultural_distance_average
   	count, dist = 0, 0
     @grid.size.times do |c|
   		neighbours = @grid.find_neighbours_index(c)
   		neighbours.each do |neighbour|
   			count += 1
-  			dist += feature_distance(@grid[c], @grid[neighbour])
+  			dist += cultural_distance(@grid[c], @grid[neighbour])
       end
     end
   	dist/@size
   end
   
-  def feature_distance(n1, n2)
+  def cultural_distance(n1, n2)
   	features = 0
   	6.times do |i|
   		f1, f2 = extract(n1, i), extract(n2, i)

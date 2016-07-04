@@ -5,8 +5,9 @@ require './culture'
 require './segregation'
 require './volunteers'
 
-set :culture_sim, CultureSimulation.new(36)
-set :segregation_sim, SegregationSimulation.new(36)
+set :width, 36
+set :culture_sim, CultureSimulation.new(settings.width)
+set :segregation_sim, SegregationSimulation.new(settings.width)
 set :volunteers_sim, VolunteerSimulation.new
 
 # Segregation
@@ -38,7 +39,7 @@ end
 
 get "/culture/start" do
   content_type :json
-  settings.culture_sim = CultureSimulation.new(36)
+  settings.culture_sim = CultureSimulation.new(settings.width)
   settings.culture_sim.grid.to_json
 end
 
@@ -56,8 +57,8 @@ get "/culture/stats" do
   content_type :json
   count, stats = 0, []
   sim  = settings.culture_sim
-  sim.fdistances.size.times do |n|
-    stats[count] = [count, sim.fdistances[n], sim.changes[n], sim.uniques[n]]
+  sim.cdistances.size.times do |n|
+    stats[count] = [count, sim.cdistances[n], sim.changes[n], sim.uniques[n]]
     count += 1
   end
   stats.to_json

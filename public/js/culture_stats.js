@@ -37,8 +37,22 @@ var Chart = React.createClass({
     this.drawChart();
   },
   render: function() {
+	  var a = [];
+	  if (this.state.data.length > 0) {
+		  a = this.state.data[this.state.data.length-1];
+	  } 
+  
     return ( 
-        <div id="chart"/>
+		<div>
+	        <div id="chart"/>
+			<hr/>
+			<div className="text-center">
+				<div className="label label-info">Tick {a[0]}</div> &nbsp;
+				<div className="label label-primary">Cultural distance {a[1]}</div>  &nbsp;
+				<div className="label label-warning">Unique cultures {a[3]}</div>  &nbsp;
+				<div className="label label-danger">Changes {a[2]}</div> 
+			</div>
+		</div>
     );
   },  
   drawChart: function() {
